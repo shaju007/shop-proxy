@@ -1,0 +1,50 @@
+openapi: 3.1.0
+info:
+  title: Shop Proxy API
+  version: 1.0.0
+  description: Proxy to access shop information from any domain
+
+servers:
+  - url: https://shop-proxy.onrender.com
+    description: Your deployed proxy server (update with actual Render URL)
+
+paths:
+  /shop:
+    get:
+      operationId: getShopInfo
+      summary: Get shop information from any domain
+      description: Retrieves shop data by specifying the shop domain
+      parameters:
+        - name: domain
+          in: query
+          required: true
+          schema:
+            type: string
+          description: Shop domain (e.g., skinny.beyondshop.cloud or fatty.pm.epages.com)
+          example: skinny.beyondshop.cloud
+      responses:
+        '200':
+          description: Successful response with shop data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  slug:
+                    type: string
+                  domain:
+                    type: string
+                  logoUrl:
+                    type: string
+                  shops:
+                    type: array
+                    items:
+                      type: object
+        '400':
+          description: Bad request - domain parameter missing
+        '404':
+          description: Shop not found
+        '500':
+          description: Server error
