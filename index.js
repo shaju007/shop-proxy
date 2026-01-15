@@ -18,14 +18,21 @@ app.get('/shop', async (req, res) => {
     }
 
     // Make request to the actual shop API
-    const response = await axios.get(`https://${domain}/api/v2/shop`);
+    const response = await axios.get(`https://${domain}/api/v2/shop`, {
+      headers: {
+        'User-Agent': 'ShopProxy/1.0'
+      },
+      timeout: 30000
+    });
     
     res.json(response.data);
   } catch (error) {
     console.error('Proxy error:', error.message);
+    console.error('Domain:', domain);
+    console.error('Full error:', error);
     res.status(error.response?.status || 500).json({
       error: error.message,
-      details: error.response?.data
+      details: error.response?.data || 'No additional details'
     });
   }
 });
